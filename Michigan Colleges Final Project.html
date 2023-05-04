@@ -1,0 +1,84 @@
+<html>
+<head>
+  <title>Noah Mayes ANP412 Webmapping Lab</title>
+  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
+  
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+
+  <style>
+	#mysupermap{ height: 100% }
+
+  </style>
+
+</head>
+<body>
+
+	<div id="mysupermap"></div>
+
+  <script>
+	
+	var map = L.map('mysupermap').setView([44.3148, -85.6024], 7);
+	L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	maxZoom: 18,
+	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox/streets-v11'
+	}).addTo(map);
+	var colleges = [
+  { name: "University of Michigan", latlng: [42.2781, -83.7382], founded: 1817, tuition: 15326, tuition2000: 7252, enrollment: 46783, enrollment2000: 39600, gradrate: 87, gradrate2000: 85  },
+  { name: "Michigan State University", latlng: [42.7291, -84.4883], founded: 1855, tuition: 15658, tuition2000: 7155, enrollment: 50011, enrollment2000: 44321, gradrate: 85, gradrate2000: 83 },
+  { name: "Hope College", latlng: [42.7899, -86.1050], founded: 1866, tuition: 33870, tuition2000: 17055, enrollment: 3571, enrollment2000: 3062, gradrate: 90, gradrate2000: 88 },
+  { name: "Albion College", latlng: [42.2444, -84.7489], founded: 1835, tuition: 42990, tuition2000: 20540, enrollment: 1550, enrollment2000: 1505, gradrate: 89, gradrate2000: 87 },
+  { name: "Kalamazoo College", latlng: [42.2914, -85.5872], founded: 1833, tuition: 50590, tuition2000: 21000, enrollment: 1360, enrollment2000: 1209, gradrate: 91, gradrate2000: 89 },
+  { name: "Adrian College", latlng: [41.8956, -84.0553], founded: 1859, tuition: 37570, tuition2000: 19360, enrollment: 1573, enrollment2000: 1363, gradrate: 88, gradrate2000: 86 },
+  { name: "Hillsdale College", latlng: [41.9210, -84.6306], founded: 1844, tuition: 26886, tuition2000: 15240, enrollment: 1411, enrollment2000: 1240, gradrate: 92, gradrate2000: 90 },
+  { name: "Michigan Technological University", latlng: [47.1185, -88.5465], founded: 1885, tuition: 15880, tuition2000: 7344, enrollment: 7734, enrollment2000: 6600, gradrate: 80, gradrate2000: 78 },
+  { name: "Northern Michigan University", latlng: [46.5577, -87.3936], founded: 1899, tuition: 10898, tuition2000: 6172, enrollment: 7456, enrollment2000: 7925, gradrate: 77, gradrate2000: 75 },
+  { name: "Grand Valley State University", latlng: [42.9634, -85.8882], founded: 1960, tuition: 12935, tuition2000: 6732, enrollment: 25906, enrollment2000: 17000, gradrate: 84, gradrate2000: 82 }
+];
+
+  
+  var header = L.Control.extend({
+  options: {
+    position: 'topright' // set the position of the control
+  },
+
+  onAdd: function (map) {
+    var div = L.DomUtil.create('div', 'header');
+    div.innerHTML = '<h1>1st 10 Michigan Colleges Founded</h1>';
+    return div;
+  }
+});
+
+map.addControl(new header());
+
+var firstMarker = null;
+
+
+for (var i = 0; i < colleges.length; i++) {
+  var college = colleges[i];
+  var popupContent = "<b>" + college.name + "</b>" +
+                     "<br>Founded: " + college.founded +
+                     "<br>Tuition (2022): $" + college.tuition.toLocaleString() +
+                     "<br>Tuition (2000): $" + college.tuition2000.toLocaleString() +
+                     "<br>Enrollment(2022): " + college.enrollment.toLocaleString() +
+           "<br>Enrollment (2000): " + college.enrollment2000.toLocaleString() +
+           "<br>Grad Rate(2022): " + college.gradrate.toLocaleString() +
+           "<br>Grad Rate(2000): " + college.gradrate2000.toLocaleString();
+  var marker = L.marker(college.latlng).addTo(map);
+  marker.bindPopup(popupContent);
+  if (i === 0) {
+    firstMarker = marker;
+  }
+}
+
+if (firstMarker !== null) {
+  firstMarker.openPopup();
+}
+
+  </script>
+
+</body>
+</html>
